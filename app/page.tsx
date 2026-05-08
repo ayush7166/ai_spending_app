@@ -1,7 +1,9 @@
+import AuditForm from "@/components/AuditForm";
+
 export default function Home() {
   return (
-    <>
-      <h1>ayush</h1>
-    </>
+    <main>
+      <AuditForm />
+    </main>
   );
 }
