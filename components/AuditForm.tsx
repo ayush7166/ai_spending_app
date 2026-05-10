@@ -5,29 +5,47 @@ import ResultsCard from "@/components/ResultsCard";
 import { AuditResult } from "@/types/audit";
 
 export default function AuditForm() {
+
   const [tool, setTool] = useState("");
+  const[subscriptionplans,setsubscriptionplans]=useState("");
   const [spend, setSpend] = useState(0);
   const [users, setUsers] = useState(1);
 
   const [result, setResult] = useState<AuditResult | null>(null);
 
   function handleAudit() {
-    const auditResult = auditEngine(tool, spend, users);
+
+    const auditResult = auditEngine(
+      tool,
+      subscriptionplans,
+      spend,
+      users
+    );
+
+    console.log(auditResult);
 
     setResult(auditResult);
   }
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div>
+
       <h1>AI Spend Audit</h1>
 
       <input
         type="text"
-        placeholder="Tool"
+        placeholder="AI Tool"
         value={tool}
         onChange={(e) => setTool(e.target.value)}
       />
 
+      <br />
+      <br />
+      <input 
+          type="text"
+          placeholder="subscription plans"
+          value={subscriptionplans}
+          onChange={(e)=>setsubscriptionplans(e.target.value)} />
       <br />
       <br />
 
@@ -43,7 +61,7 @@ export default function AuditForm() {
 
       <input
         type="number"
-        placeholder="Users"
+        placeholder="Total Users"
         value={users}
         onChange={(e) => setUsers(Number(e.target.value))}
       />
@@ -55,7 +73,11 @@ export default function AuditForm() {
         Run Audit
       </button>
 
+      <br />
+      <br />
+
       {result && <ResultsCard result={result} />}
+
     </div>
   );
 }
