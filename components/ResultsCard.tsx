@@ -11,7 +11,8 @@ export default function ResultsCard({
 }: Props) {
 
   return (
-    <div
+    <div 
+      className="resultcard"
       style={{
         border: "1px solid gray",
         padding: "20px",
