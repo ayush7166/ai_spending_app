@@ -4,13 +4,13 @@ import { pricing } from "@/data/pricing";
 export function auditEngine(
   tool: string,
   subscriptionplans: string,
-  spend,
+  spend :number,
   users: number
 ): AuditResult {
 
   const currentTool =
     tool.toLowerCase();
-  
+
   const currentPlan =
     subscriptionplans.toLowerCase();
 
