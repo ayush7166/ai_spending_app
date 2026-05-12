@@ -1,175 +1,162 @@
-// logic/auditEngine.ts
-
 import { AuditResult } from "@/types/audit";
 import { pricing } from "@/data/pricing";
 
 export function auditEngine(
   tool: string,
   subscriptionplans: string,
-  spend: number,
   users: number
 ): AuditResult {
 
-  const normalizedTool =
+  const currentTool =
     tool.toLowerCase();
 
-  const normalizedPlan =
+  const currentPlan =
     subscriptionplans.toLowerCase();
 
-  /*
-    CHATGPT TEAM → PLUS
-  */
+  const selectedTool =
+    pricing[
+      currentTool as keyof typeof pricing
+    ];
 
-  if (
-    normalizedTool === "chatgpt" &&
-    normalizedPlan === "team" &&
-    users <= 3
-  ) {
-
-    const currentCost =
-      users * pricing.chatgpt.team.price;
-
-    const optimizedCost =
-      users * pricing.chatgpt.plus.price;
-
-    const savings =
-      currentCost - optimizedCost;
-
+  if (!selectedTool) {
     return {
       recommendation:
-        "Downgrade current plan",
-
-      savings,
-
+        "Tool not found",
+      savings: 0,
       reason:
-        "Small teams rarely require collaboration and admin tools included in Team plans.",
-
-      optimizationScore: 82,
-
+        "Entered AI tool does not exist in dataset.",
+      optimizationScore: 0,
       suggestedAlternative:
-        "ChatGPT Plus",
+        "None",
     };
   }
 
-  /*
-    COPILOT BUSINESS → INDIVIDUAL
-  */
+  const selectedPlan =
+    selectedTool[
+      currentPlan as keyof typeof selectedTool
+    ];
 
-  if (
-    normalizedTool === "copilot" &&
-    normalizedPlan === "business" &&
-    users <= 2
-  ) {
-
-    const currentCost =
-      users * pricing.copilot.business.price;
-
-    const optimizedCost =
-      users * pricing.copilot.individual.price;
-
-    const savings =
-      currentCost - optimizedCost;
-
+  if (!selectedPlan) {
     return {
       recommendation:
-        "Switch to Copilot Individual",
-
-      savings,
-
+        "Plan not found",
+      savings: 0,
       reason:
-        "Business management tools are unnecessary for very small teams.",
-
-      optimizationScore: 80,
-
+        "Entered subscription plan does not exist.",
+      optimizationScore: 0,
       suggestedAlternative:
-        "Copilot Individual",
+        "None",
     };
   }
 
-  /*
-    CHATGPT PRO → CLAUDE PRO
-  */
-
-  if (
-    normalizedTool === "chatgpt" &&
-    normalizedPlan === "pro"
-  ) {
-
-    const currentCost =
-      pricing.chatgpt.pro.price;
-
-    const optimizedCost =
-      pricing.claude.pro.price;
-
-    const savings =
-      currentCost - optimizedCost;
-
+  if (users <= 0) {
     return {
       recommendation:
-        "Consider switching to Claude Pro",
-
-      savings,
-
+        "Invalid user count",
+      savings: 0,
       reason:
-        "Claude Pro provides comparable advanced reasoning capabilities at significantly lower cost.",
-
-      optimizationScore: 75,
-
+        "Users must be greater than zero.",
+      optimizationScore: 0,
       suggestedAlternative:
-        "Claude Pro",
+        "None",
     };
   }
 
-  /*
-    GEMINI ADVANCED → PERPLEXITY PRO
-  */
+  const currentPriority =
+    selectedPlan.priority;
 
-  if (
-    normalizedTool === "gemini" &&
-    normalizedPlan === "advanced"
-  ) {
+  const currentCost =
+    selectedPlan.price * users;
 
-    const currentCost =
-      pricing.gemini.advanced.price;
+  let bestTool =
+    currentTool;
 
-    const optimizedCost =
-      pricing.perplexity.pro.price;
+  let bestPlan =
+    currentPlan;
 
-    const savings =
-      currentCost - optimizedCost;
+  let bestCost =
+    currentCost;
+
+  for (const toolName in pricing) {
+
+    const toolData =
+      pricing[
+        toolName as keyof typeof pricing
+      ];
+
+    for (const planName in toolData) {
+
+      const comparePlan =
+        toolData[
+          planName as keyof typeof toolData
+        ];
+
+      if (
+        toolName === currentTool &&
+        planName === currentPlan
+      ) {
+        continue;
+      }
+
+      if (
+        comparePlan.priority !==
+        currentPriority
+      ) {
+        continue;
+      }
+
+      const compareCost =
+        comparePlan.price * users;
+
+      if (compareCost < bestCost) {
+
+        bestCost =
+          compareCost;
+
+        bestTool =
+          toolName;
+
+        bestPlan =
+          planName;
+      }
+    }
+  }
+
+  const savings =
+    currentCost - bestCost;
+
+  const optimizationScore =
+    savings > 0
+      ? Math.max(
+          50,
+          100 - Math.round(
+            (savings / currentCost) * 100
+          )
+        )
+      : 100;
+
+  if (savings > 0) {
 
     return {
       recommendation:
-        "Consider switching to Perplexity Pro",
-
+        `Switch from ${tool} ${subscriptionplans} to ${bestTool} ${bestPlan}`,
       savings,
-
       reason:
-        "Perplexity offers strong research-focused workflows and multi-model access.",
-
-      optimizationScore: 74,
-
+        "A lower-cost plan with equivalent priority level was found across AI providers.",
+      optimizationScore,
       suggestedAlternative:
-        "Perplexity Pro",
+        `${bestTool} ${bestPlan}`,
     };
   }
-
-  /*
-    DEFAULT
-  */
 
   return {
     recommendation:
-      "Current setup appears optimized",
-
+      "Current plan already optimized",
     savings: 0,
-
     reason:
-      "No significant overspending detected.",
-
-    optimizationScore: 100,
-
+      "No cheaper equivalent-priority plan exists in the dataset.",
+    optimizationScore,
     suggestedAlternative:
-      "Current Plan",
+      `${tool} ${subscriptionplans}`,
   };
 }

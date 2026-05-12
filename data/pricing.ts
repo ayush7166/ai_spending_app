@@ -1,193 +1,84 @@
+// data/pricing.ts
+//we compair on the bases of priority and priority is based on features that plan provide
 export const pricing = {
   chatgpt: {
     free: {
+      priority: 1,
       price: 0,
-      billing: "monthly",
-      models: ["GPT-5 mini"],
-      features: [
-        "Limited GPT access",
-        "Basic image generation",
-        "Web browsing",
-      ],
     },
-
     plus: {
+      priority: 2,
       price: 20,
-      billing: "monthly",
-      models: ["GPT-5", "GPT-5 mini"],
-      features: [
-        "Higher usage limits",
-        "Faster responses",
-        "Advanced image generation",
-        "File uploads",
-        "Deep research tools",
-        "Custom GPTs",
-      ],
     },
-
     pro: {
+      priority: 3,
       price: 200,
-      billing: "monthly",
-      models: ["GPT-5 Pro", "GPT-5"],
-      features: [
-        "Highest limits",
-        "Priority access",
-        "Advanced reasoning",
-        "Long context window",
-        "Premium tools",
-      ],
     },
-
     team: {
+      priority: 2,
       price: 30,
-      billing: "monthly_per_user",
-      annualPrice: 25,
-      models: ["GPT-5"],
-      features: [
-        "Workspace collaboration",
-        "Admin console",
-        "Shared GPTs",
-        "Business security",
-      ],
     },
   },
-
   claude: {
     free: {
+      priority: 1,
       price: 0,
-      billing: "monthly",
-      models: ["Claude Sonnet"],
-      features: [
-        "Limited usage",
-        "Basic chat access",
-      ],
     },
-
     pro: {
+      priority: 2,
       price: 20,
-      billing: "monthly",
-      models: ["Claude Opus", "Claude Sonnet"],
-      features: [
-        "Higher usage limits",
-        "Priority access",
-        "Long conversations",
-        "Projects feature",
-      ],
     },
-
     team: {
+      priority: 2,
       price: 30,
-      billing: "monthly_per_user",
-      models: ["Claude Opus"],
-      features: [
-        "Team collaboration",
-        "Central billing",
-        "Admin tools",
-      ],
     },
   },
-
   gemini: {
     free: {
+      priority: 1,
       price: 0,
-      billing: "monthly",
-      models: ["Gemini Flash"],
-      features: [
-        "Basic AI chat",
-        "Google integration",
-      ],
     },
-
     advanced: {
+      priority: 2,
       price: 20,
-      billing: "monthly",
-      models: ["Gemini Pro"],
-      features: [
-        "Advanced reasoning",
-        "Large context window",
-        "Google Workspace integration",
-        "NotebookLM Plus",
-      ],
     },
   },
-
   copilot: {
     free: {
+      priority: 1,
       price: 0,
-      billing: "monthly",
-      models: ["GPT-4o limited"],
-      features: [
-        "Basic coding help",
-        "VS Code integration",
-      ],
     },
-
     individual: {
+      priority: 2,
       price: 10,
-      billing: "monthly",
-      models: ["GPT-4o"],
-      features: [
-        "Code autocomplete",
-        "Chat in IDE",
-        "Pull request summaries",
-      ],
     },
-
     business: {
+      priority: 2,
       price: 19,
-      billing: "monthly_per_user",
-      models: ["GPT-4o"],
-      features: [
-        "Organization policies",
-        "Enterprise security",
-        "Admin management",
-      ],
     },
   },
-
   perplexity: {
     free: {
+      priority: 1,
       price: 0,
-      billing: "monthly",
-      models: ["Basic online models"],
-      features: [
-        "Web search",
-        "Limited pro searches",
-      ],
     },
 
     pro: {
+      priority: 2,
       price: 20,
-      billing: "monthly",
-      models: ["GPT-5", "Claude", "Gemini"],
-      features: [
-        "Pro searches",
-        "Multiple LLM access",
-        "File upload",
-        "Research mode",
-      ],
     },
   },
 
   grok: {
+
     free: {
+      priority: 1,
       price: 0,
-      billing: "monthly",
-      models: ["Grok limited"],
-      features: [
-        "Limited usage",
-      ],
     },
 
     premiumPlus: {
+      priority: 2,
       price: 16,
-      billing: "monthly",
-      models: ["Grok"],
-      features: [
-        "Higher limits",
-        "X platform integration",
-        "Image generation",
-      ],
     },
   },
 };
